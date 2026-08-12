@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
-});
+Route::get('register', [UserController::class, 'create'])->name('register');
 
-require __DIR__.'/settings.php';
+Route::post('register', [UserController::class, 'store'])->name('user.store');
+
+Route::get('login', [UserController::class, 'login'])->name('login');
+
