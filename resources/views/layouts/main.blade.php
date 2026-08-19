@@ -25,6 +25,9 @@
                     <li class="nav-item">
                         <a class="nav-link text-warning" href="#">Выход</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="#">Админ</a>
+                    </li>
                     @else
                     <li class="nav-item">
                         <a class="nav-link text-warning" href="login">Вход</a>
@@ -34,9 +37,7 @@
                     </li>
                     @endif
 
-                    <li class="nav-item">
-                        <a class="nav-link text-warning" href="#">Админ</a>
-                    </li>
+
 
 
                 </ul>

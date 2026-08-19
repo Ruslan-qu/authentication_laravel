@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -27,7 +28,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+
+        $request->validate([
+        'name' => ['required', 'min:3', 'max:255'],
+        'email' => ['required', 'email', 'max:255', 'unique:users'],
+        'password' => ['required', 'confirmed'],
+        'remember_token' => ['nullable', 'max:100']
+        ]);
+
+        User::create($request->all());
+
+        return redirect()->route('login');
     }
 
     /**
