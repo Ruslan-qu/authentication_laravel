@@ -45,10 +45,6 @@
                     placeholder="Подтвердите пароль">
             </div>
 
-            <div class="mb-3 form-check">
-                <input name="remember" type="checkbox" class="form-check-input" id="remember">
-                <label class="form-check-label" for="remember">Запомнить меня</label>
-            </div>
             <button type="submit" class="btn btn-primary">Зарегистрировать</button>
 
         </form>

@@ -20,10 +20,10 @@
                     </li>
                     @auth
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="#">Личный кабинет</a>
+                        <a class="nav-link text-warning" href="{{ route('user.dashboard', auth()->user()) }}">Личный кабинет</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="#">Выход</a>
+                        <a class="nav-link text-warning" href="{{ route('logout') }}">Выход</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-warning" href="#">Админ</a>

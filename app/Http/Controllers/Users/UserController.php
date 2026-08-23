@@ -1,9 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Users;
 
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ValidStoreUserRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -26,19 +31,17 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ValidStoreUserRequest $validStoreUserRequest)
     {
+        $validStoreUserRequest->validated();
 
-        $request->validate([
-        'name' => ['required', 'min:3', 'max:255'],
-        'email' => ['required', 'email', 'max:255', 'unique:users'],
-        'password' => ['required', 'confirmed'],
-        'remember_token' => ['nullable', 'max:100']
-        ]);
+        $user = User::create($validStoreUserRequest->all());
 
-        User::create($request->all());
+        event(new Registered($user));
 
-        return redirect()->route('login');
+        Auth::login($user);
+
+        return redirect()->route('verification.notice');
     }
 
     /**
@@ -71,10 +74,5 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-    public function login()
-    {
-        return view('user.login');
     }
 }
