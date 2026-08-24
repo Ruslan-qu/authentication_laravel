@@ -10,11 +10,13 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('register', [UserController::class, 'create'])->name('register');
+Route::get('register', [UserController::class, 'create'])->middleware('guest')->name('register');
 
-Route::post('register', [UserController::class, 'store'])->name('user.store');
+Route::post('register', [UserController::class, 'store'])->middleware('guest')->name('user.store');
 
-Route::get('login', [AuthorizationController::class, 'login'])->name('login');
+Route::get('login', [AuthorizationController::class, 'create'])->middleware('guest')->name('login');
+
+Route::post('login', [AuthorizationController::class, 'store'])->middleware('guest')->name('login');
 
 Route::get('logout', [AuthorizationController::class, 'logout'])
 ->middleware('auth')->name('logout');

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class AuthorizationController extends Controller
 {
 
+
     /**
      * Authorization user.
      */
