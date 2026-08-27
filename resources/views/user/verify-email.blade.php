@@ -6,7 +6,7 @@
 
 <div class="container my-4">
     <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
+        <div class="col-sm-11 col-md-8 col-lg-6 col-xl-5">
             <div class="card shadow-sm border-0 text-center p-4">
                 <div class="card-body">
                     <h2 class="card-title h4 mb-3 fw-bold">Подтвердите свой адрес электронной почты</h2>

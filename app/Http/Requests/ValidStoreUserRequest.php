@@ -25,23 +25,9 @@ class ValidStoreUserRequest extends FormRequest
         
         return [
             'name' => ['required', 'string', 'min:3', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed']
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'confirmed']
         ];
     }
 
-    /**
-    * Get custom attributes for validator errors.
-    *
-    * @return array<string, string>
-    */
-    public function attributes(): array
-    {
-        return [
-            'name' => 'Имя',
-            'email' => 'Email',
-            'password' => 'Пароль',
-            'password_confirmation' => 'Подтвердите пароль',
-        ];
-    }
 }

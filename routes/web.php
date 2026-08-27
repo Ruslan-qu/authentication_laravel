@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthorizationController;
+use App\Http\Controllers\Users\AuthorizationController;
 use App\Http\Controllers\Users\DashboardUserController;
 use App\Http\Controllers\Users\EmailVerificationController;
 use App\Http\Controllers\Users\UserController;
@@ -10,13 +10,17 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('register', [UserController::class, 'create'])->middleware('guest')->name('register');
+Route::get('register', [UserController::class, 'create'])
+->middleware('guest')->name('register');
 
-Route::post('register', [UserController::class, 'store'])->middleware('guest')->name('user.store');
+Route::post('register', [UserController::class, 'store'])
+->middleware('guest')->name('user.store');
 
-Route::get('login', [AuthorizationController::class, 'create'])->middleware('guest')->name('login');
+Route::get('login', [AuthorizationController::class, 'login'])
+->middleware('guest')->name('login');
 
-Route::post('login', [AuthorizationController::class, 'store'])->middleware('guest')->name('login');
+Route::post('login', [AuthorizationController::class, 'AuthorizationUser'])
+->middleware('guest')->name('Authorization.user');
 
 Route::get('logout', [AuthorizationController::class, 'logout'])
 ->middleware('auth')->name('logout');
