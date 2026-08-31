@@ -1,22 +1,22 @@
 @extends('layouts.main')
 
-@section('title', 'Регистрация')
+@section('title', 'Сменить пароль')
 
 @section('content')
+
 <div class="row justify-content-center">
 
     <div class="col-sm-8 col-md-6 col-lg-4">
-        <h1 class="text-center">Регистрация</h1>
-        <form action="{{ route ('user.store') }}" method="post">
+
+        <h1 class="text-center">Сменить пароль</h1>
+
+        <form action="{{ route ('password.update') }}" method="post">
 
             @csrf
 
-            <div class="mb-3">
-                <label for="name" class="form-label">Имя</label>
-                <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                    placeholder="Имя" value="{{ old('name') }}">
-            </div>
-            @error('name')
+            <input type="hidden" name="token" value="{{ $token }}">
+
+            @error('errorForgotPassword')
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
 
@@ -45,10 +45,9 @@
                     placeholder="Подтвердите пароль">
             </div>
 
-            <button type="submit" class="btn btn-primary">Зарегистрировать</button>
+            <button type="submit" class="btn btn-danger">Сменить пароль</button>
 
         </form>
     </div>
 </div>
-
 @endsection

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Users\AuthorizationController;
 use App\Http\Controllers\Users\DashboardUserController;
 use App\Http\Controllers\Users\EmailVerificationController;
+use App\Http\Controllers\Users\ResetPasswordController;
 use App\Http\Controllers\Users\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,11 +17,23 @@ Route::get('register', [UserController::class, 'create'])
 Route::post('register', [UserController::class, 'store'])
 ->middleware('guest')->name('user.store');
 
+Route::get('/forgot-password', [ResetPasswordController::class, 'formEmailPasswordReset'])
+->middleware('guest')->name('password.request');
+
+Route::post('/forgot-password', [ResetPasswordController::class, 'handlingEmailFormPasswordReset'])
+->middleware(['guest', 'throttle:2,1'])->name('password.email');
+
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'formPasswordReset'])
+->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', [ResetPasswordController::class, 'passwordReset'])
+->middleware('guest')->name('password.update');
+
 Route::get('login', [AuthorizationController::class, 'login'])
 ->middleware('guest')->name('login');
 
-Route::post('login', [AuthorizationController::class, 'AuthorizationUser'])
-->middleware('guest')->name('Authorization.user');
+Route::post('login', [AuthorizationController::class, 'authorizationUser'])
+->middleware('guest')->name('authorization.user');
 
 Route::get('logout', [AuthorizationController::class, 'logout'])
 ->middleware('auth')->name('logout');

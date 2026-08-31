@@ -5,11 +5,15 @@
 @section('content')
 <div class="row justify-content-center">
 
-    <div class="col-5">
+    <div class="col-sm-8 col-md-6 col-lg-4">
         <h1 class="text-center">Вход</h1>
-        <form action="{{ route ('user.store') }}" method="post">
+        <form action="{{ route ('authorization.user') }}" method="post">
 
             @csrf
+
+            @error('errorAuthorization')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
@@ -30,13 +34,15 @@
             @enderror
 
             <div class="mb-3 form-check">
-                <input name="remember" class="form-check-input" type="checkbox" value="" id="remember">
+                <input name="remember" class="form-check-input" type="checkbox" id="remember">
                 <label class="form-check-label" for="remember">
                     Запомнить меня
                 </label>
             </div>
 
             <button type="submit" class="btn btn-danger">Вход</button>
+
+            <a href="{{ route('password.request') }}" class="ms-3">Забыл пароль?</a>
 
         </form>
     </div>

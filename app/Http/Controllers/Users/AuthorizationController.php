@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ValidAuthorizationUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,9 +21,22 @@ class AuthorizationController extends Controller
     /**
      * Authorization user.
      */
-    public function AuthorizationUser(Request $request)
+    public function authorizationUser(ValidAuthorizationUserRequest $validAuthorizationUserRequest)
     {
-        dd($request->all());
+        
+        $credentials = $validAuthorizationUserRequest->validated();
+
+        if (Auth::attempt($credentials, $validAuthorizationUserRequest->boolean('remember'))) {
+            $validAuthorizationUserRequest->session()->regenerate();
+
+            $user = Auth::user();
+ 
+            return redirect()->route('user.dashboard', ['user' => $user]);
+        }
+
+        return back()->withErrors([
+            'errorAuthorization' => 'Указанные учетные данные не соответствуют.',
+        ]);
     }
 
     /**
