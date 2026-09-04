@@ -17,21 +17,15 @@
 
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" id="email"
-                    placeholder="email" value="{{ old('email') }}">
+                <input name="email" type="email" class="form-control" id="email"
+                    placeholder="email">
             </div>
-            @error('email')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
 
             <div class="mb-3">
                 <label for="password" class="form-label">Пароль</label>
-                <input name="password" type="password" class="form-control @error('password') is-invalid @enderror"
+                <input name="password" type="password" class="form-control"
                     id="password" placeholder="Пароль">
             </div>
-            @error('password')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
 
             <div class="mb-3 form-check">
                 <input name="remember" class="form-check-input" type="checkbox" id="remember">

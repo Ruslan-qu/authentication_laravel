@@ -16,10 +16,6 @@
 
             <input type="hidden" name="token" value="{{ $token }}">
 
-            @error('errorForgotPassword')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
-
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" id="email"
@@ -30,7 +26,7 @@
             @enderror
 
             <div class="mb-3">
-                <label for="password" class="form-label">Пароль</label>
+                <label for="password" class="form-label">Новый пароль</label>
                 <input name="password" type="password" class="form-control @error('password') is-invalid @enderror"
                     id="password" placeholder="Пароль">
             </div>

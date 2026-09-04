@@ -17,11 +17,6 @@
                         функциям.
                     </p>
 
-                    <div class="d-grid gap-2 mb-3">
-                        <a href="#" target="_blank" class="btn btn-primary btn-lg">Открыть папку
-                            «Входящие»</a>
-                    </div>
-
                     <div>
                         <form method="POST" action="{{ route('verification.send') }}">
                             @csrf

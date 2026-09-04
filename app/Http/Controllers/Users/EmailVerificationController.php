@@ -36,6 +36,6 @@ class EmailVerificationController extends Controller
     {
         $request->user()->sendEmailVerificationNotification();
  
-        return back()->with('message', 'Ссылка для подтверждения отправлена!');
+        return back()->with('status', 'Ссылка для подтверждения отправлена!');
     }
 }

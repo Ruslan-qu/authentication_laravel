@@ -37,9 +37,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-warning" href="{{ route('logout') }}">Выход</a>
                         </li>
+                        @auth('admin')
                         <li class="nav-item">
                             <a class="nav-link text-warning" href="#">Админ</a>
                         </li>
+                        @endauth
                         @else
                         <li class="nav-item">
                             <a class="nav-link text-warning" href="login">Вход</a>
@@ -62,6 +64,13 @@
     <main class="main mt-3">
 
         <div class="container">
+
+            @session('status')
+                <div class="alert alert-success">
+                    {{ $value }}
+                </div>
+            @endsession
+
             @yield('content')
         </div>
 
