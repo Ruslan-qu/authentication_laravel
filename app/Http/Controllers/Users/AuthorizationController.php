@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ValidAuthorizationUserRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,14 +24,14 @@ class AuthorizationController extends Controller
      */
     public function authorizationUser(ValidAuthorizationUserRequest $validAuthorizationUserRequest)
     {
-        
+
         $credentials = $validAuthorizationUserRequest->validated();
 
         if (Auth::attempt($credentials, $validAuthorizationUserRequest->boolean('remember'))) {
             $validAuthorizationUserRequest->session()->regenerate();
 
             $user = Auth::user();
- 
+
             return redirect()->route('user.dashboard', ['user' => $user]);
         }
 
@@ -42,9 +43,13 @@ class AuthorizationController extends Controller
     /**
      * Log user out.
      */
-    public function logout()
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
 
         return redirect()->route('login');
     }

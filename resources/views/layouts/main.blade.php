@@ -37,19 +37,21 @@
                         <li class="nav-item">
                             <a class="nav-link text-warning" href="{{ route('logout') }}">Выход</a>
                         </li>
-                        @auth('admin')
+
                         <li class="nav-item">
                             <a class="nav-link text-warning" href="#">Админ</a>
                         </li>
+
                         @endauth
-                        @else
+
+                        @guest
                         <li class="nav-item">
                             <a class="nav-link text-warning" href="login">Вход</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-warning" href="register">Регистрация</a>
                         </li>
-                        @endif
+                        @endguest
 
                     </ul>
 
@@ -64,12 +66,13 @@
     <main class="main mt-3">
 
         <div class="container">
-
-            @session('status')
-                <div class="alert alert-success">
+            <div class="row justify-content-center">
+                @session('status')
+                <div class="alert alert-success text-center col-11 col-md-8 col-lg-6 col-xl-5">
                     {{ $value }}
                 </div>
-            @endsession
+                @endsession
+            </div>
 
             @yield('content')
         </div>
