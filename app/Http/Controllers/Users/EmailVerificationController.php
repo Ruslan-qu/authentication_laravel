@@ -18,6 +18,16 @@ class EmailVerificationController extends Controller
     }
 
     /**
+     * Resending the Verification Email.
+     */
+    public function send(Request $request)
+    {
+        $request->user()->sendEmailVerificationNotification();
+ 
+        return back()->with('status', 'Ссылка для подтверждения отправлена!');
+    }
+
+    /**
      * The Email Verification Handler.
      */
     public function verify(EmailVerificationRequest $request)
@@ -27,15 +37,5 @@ class EmailVerificationController extends Controller
         $user = Auth::user();
  
         return redirect()->route('user.dashboard', ['user' => $user]);
-    }
-
-    /**
-     * Resending the Verification Email.
-     */
-    public function send(Request $request)
-    {
-        $request->user()->sendEmailVerificationNotification();
- 
-        return back()->with('status', 'Ссылка для подтверждения отправлена!');
     }
 }
