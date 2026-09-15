@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -10,12 +11,20 @@ class EmailVerificationTest extends TestCase
 {
     /**
      * Test route verification notice.
+     *  
      */
     public function test_route_verification_notice(): void
     {
-        $response = $this->get('/email/verify');
+        $id = User::factory()->create([
+            'email_verified_at' => null,
+        ])->getAttributeValue('id');
+        
+        $user = User::all()->find($id);
+
+        $response = $this->actingAs($user)->get(route('verification.notice'));
 
         $response->assertStatus(200);
+        //dd($user);
     }
 
     /**
