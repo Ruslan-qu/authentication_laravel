@@ -39,13 +39,13 @@ Route::get('logout', [AuthorizationController::class, 'logout'])
 ->middleware('auth')->name('logout');
 
 Route::get('/email/verify', [EmailVerificationController::class, 'notice'])
-->middleware('auth')->name('verification.notice');
+->middleware('auth', 'unverified')->name('verification.notice');
 
 Route::post('/email/verification-notification', [EmailVerificationController::class, 'send'])
-->middleware(['auth', 'throttle:2,1'])->name('verification.send');
+->middleware(['auth', 'unverified', 'throttle:2,1'])->name('verification.send');
 
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
-->middleware(['auth', 'signed'])->name('verification.verify');
+->middleware(['auth', 'unverified', 'signed'])->name('verification.verify');
 
 Route::get('/user/dashboard/{user}', [DashboardUserController::class, 'index'])
 ->middleware(['auth', 'verified'])->name('user.dashboard');

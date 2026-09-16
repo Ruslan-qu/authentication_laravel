@@ -23,7 +23,7 @@ class EmailVerificationController extends Controller
     public function send(Request $request)
     {
         $request->user()->sendEmailVerificationNotification();
- 
+
         return back()->with('status', 'Ссылка для подтверждения отправлена!');
     }
 
@@ -35,7 +35,9 @@ class EmailVerificationController extends Controller
         $request->fulfill();
 
         $user = Auth::user();
- 
-        return redirect()->route('user.dashboard', ['user' => $user]);
+
+        return redirect()
+            ->route('user.dashboard', ['user' => $user])
+            ->with('status', 'Email подтвержден!');
     }
 }
