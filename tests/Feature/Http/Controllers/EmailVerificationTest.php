@@ -4,8 +4,6 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
@@ -306,10 +304,11 @@ class EmailVerificationTest extends TestCase
 
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
-            now()->addSeconds(0.1),
+            now()->addMinutes(1),
             ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
         );
-
+        $this->travel(61)->seconds();
+        
         $response = $this->actingAs($user)->get($verificationUrl);
 
         $response->assertStatus(403);
@@ -324,9 +323,11 @@ class EmailVerificationTest extends TestCase
 
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify',
-            now()->addSeconds(0.1),
+            now()->addMinutes(1),
             ['id' => $user->id, 'hash' => sha1($user->getEmailForVerification())]
         );
+
+        $this->travel(61)->seconds();
 
         $this->actingAs($user)->get($verificationUrl);
 

@@ -7,14 +7,27 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
+
     /**
      * Test route home.
      */
     public function test_route_home(): void
     {
-        $response = $this->get('/');
+        $response = $this->get(route('home'));
 
         $response->assertStatus(200);
+    }
+
+    /**
+     * Test route home view.
+     *  
+     */
+    public function test_route_home_view(): void
+    {
+
+        $response = $this->get(route('home'));
+
+        $response->assertViewIs('welcome');
     }
 
     /**
@@ -22,9 +35,21 @@ class UserTest extends TestCase
      */
     public function test_route_register(): void
     {
-        $response = $this->get('/register');
+        $response = $this->get(route('register'));
 
         $response->assertStatus(200);
+    }
+
+    /**
+     * Test route register view.
+     *  
+     */
+    public function test_route_register_view(): void
+    {
+
+        $response = $this->get(route('register'));
+
+        $response->assertViewIs('user.create');
     }
 
     /**
@@ -32,8 +57,8 @@ class UserTest extends TestCase
      */
     public function test_route_register_user_store(): void
     {
-        $response = $this->post('/register');
+        $response = $this->post(route('register'));
 
-        $response->assertStatus(302);
+        $response->assertRedirect(route('verification.notice'));
     }
 }
