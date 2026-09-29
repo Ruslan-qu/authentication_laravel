@@ -37,7 +37,7 @@ class AuthorizationTest extends TestCase
     public function test_route_login_guests(): void
     {
 
-        $response = $this->post(route('login'));
+        $this->post(route('login'));
 
         $this->assertGuest();
     }
@@ -53,7 +53,7 @@ class AuthorizationTest extends TestCase
             'password' => '',
         ];
 
-        $response = $this->post(route('login'), $user);
+        $response = $this->post(route('authorization.user'), $user);
 
         $response->assertSessionHasErrors(['email', 'password']);
     }
@@ -76,7 +76,7 @@ class AuthorizationTest extends TestCase
             'password' => 'password123',
         ];
 
-        $response = $this->post(route('login'), $user);
+        $response = $this->post(route('authorization.user'), $user);
 
         $response->assertValid();
     }
@@ -101,7 +101,7 @@ class AuthorizationTest extends TestCase
 
         $sessionId = Session::getId();
 
-        $response = $this->post(route('login'), $data);
+        $response = $this->post(route('authorization.user'), $data);
 
         $newSessionId = $response->getSession()->getId();
 
@@ -126,7 +126,7 @@ class AuthorizationTest extends TestCase
             'password' => 'password123',
         ];
 
-        $response = $this->post(route('login'), $data);
+        $this->post(route('authorization.user'), $data);
 
         $this->assertAuthenticatedAs($user);
     }
@@ -137,7 +137,7 @@ class AuthorizationTest extends TestCase
     public function test_route_authorization_user__authenticate_remember(): void
     {
 
-        $user = User::factory()->verified()->create(
+        User::factory()->verified()->create(
             [
                 'email' => 'ivan@example.com',
                 'password' => 'password123',
@@ -150,7 +150,7 @@ class AuthorizationTest extends TestCase
             'remember' => 'on',
         ];
 
-        $response = $this->post(route('login'), $data);
+        $response = $this->post(route('authorization.user'), $data);
 
         $response->assertCookie(Auth::getRecallerName());
     }
@@ -173,7 +173,7 @@ class AuthorizationTest extends TestCase
             'password' => 'password123',
         ];
 
-        $response = $this->post(route('login'), $data);
+        $response = $this->post(route('authorization.user'), $data);
 
         $response->assertRedirect(route('user.dashboard', ['user' => $user]));
     }
@@ -183,7 +183,7 @@ class AuthorizationTest extends TestCase
      */
     public function test_route_authorization_user_message(): void
     {
-        $user = User::factory()->verified()->create(
+        User::factory()->verified()->create(
             [
                 'email' => 'ivan@example.com',
                 'password' => 'password123',
@@ -195,9 +195,9 @@ class AuthorizationTest extends TestCase
             'password' => 'password12',
         ];
 
-        $response = $this->post(route('login'), $data);
+        $response = $this->post(route('authorization.user'), $data);
 
-        $response->assertSessionHas('errorAuthorization', 'Указанные учетные данные не соответствуют.');
+        $response->assertSessionHasErrors(['errorAuthorization' => 'Указанные учетные данные не соответствуют.']);
     }
 
     /**
@@ -205,7 +205,7 @@ class AuthorizationTest extends TestCase
      */
     public function test_route_authorization_user_invalid_attempt(): void
     {
-        $user = User::factory()->verified()->create(
+        User::factory()->verified()->create(
             [
                 'email' => 'ivan@example.com',
                 'password' => 'password123',
@@ -217,19 +217,48 @@ class AuthorizationTest extends TestCase
             'password' => 'password12',
         ];
 
-        $response = $this->post(route('login'), $data);
+        $response = $this->from(route('login'))
+            ->post(route('authorization.user'), $data);
 
         $response->assertRedirect(route('login'));
     }
 
     /**
+     * Test route authorization user guests.
+     */
+    public function test_route_authorization_user_guests(): void
+    {
+
+        $data = [
+            'email' => 'ivan@exampl.com',
+            'password' => 'password12',
+        ];
+
+        $this->post(route('authorization.user'), $data);
+
+        $this->assertGuest();
+    }
+
+/**
      * Test route logout.
      */
     public function test_route_logout(): void
     {
+        $user = User::factory()->verified()->create();
+
+        $response = $this->actingAs($user)->get('/logout');
+
+        $response->assertRedirect(route('login'));
+    }
+
+    /**
+     * Test route logout redirect.
+     */
+    public function test_route_logout_redirect(): void
+    {
 
         $response = $this->get('/logout');
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect(route('login'));
     }
 }
