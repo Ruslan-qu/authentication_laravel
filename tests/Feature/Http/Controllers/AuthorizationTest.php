@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 
@@ -63,6 +64,13 @@ class AuthorizationTest extends TestCase
     public function test_route_authorization_user_valid(): void
     {
 
+        User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
+
         $user = [
             'email' => 'ivan@example.com',
             'password' => 'password123',
@@ -101,13 +109,117 @@ class AuthorizationTest extends TestCase
     }
 
     /**
-     * Test route authorization user.
+     * Test route authorization user authenticate.
      */
-    public function test_route_authorization_user(): void
+    public function test_route_authorization_user_authenticate(): void
     {
-        $response = $this->post('/login');
 
-        $response->assertStatus(302);
+        $user = User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
+
+        $data = [
+            'email' => 'ivan@example.com',
+            'password' => 'password123',
+        ];
+
+        $response = $this->post(route('login'), $data);
+
+        $this->assertAuthenticatedAs($user);
+    }
+
+    /**
+     * Test route authorization user authenticate remember.
+     */
+    public function test_route_authorization_user__authenticate_remember(): void
+    {
+
+        $user = User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
+
+        $data = [
+            'email' => 'ivan@example.com',
+            'password' => 'password123',
+            'remember' => 'on',
+        ];
+
+        $response = $this->post(route('login'), $data);
+
+        $response->assertCookie(Auth::getRecallerName());
+    }
+
+    /**
+     * Test route authorization user authenticate redirect.
+     */
+    public function test_route_authorization_user_authenticate_redirect(): void
+    {
+
+        $user = User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
+
+        $data = [
+            'email' => 'ivan@example.com',
+            'password' => 'password123',
+        ];
+
+        $response = $this->post(route('login'), $data);
+
+        $response->assertRedirect(route('user.dashboard', ['user' => $user]));
+    }
+
+    /**
+     * Test route authorization user message.
+     */
+    public function test_route_authorization_user_message(): void
+    {
+        $user = User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
+
+        $data = [
+            'email' => 'ivan@exampl.com',
+            'password' => 'password12',
+        ];
+
+        $response = $this->post(route('login'), $data);
+
+        $response->assertSessionHas('errorAuthorization', 'Указанные учетные данные не соответствуют.');
+    }
+
+    /**
+     * Test route authorization user invalid attempt.
+     */
+    public function test_route_authorization_user_invalid_attempt(): void
+    {
+        $user = User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
+
+        $data = [
+            'email' => 'ivan@exampl.com',
+            'password' => 'password12',
+        ];
+
+        $response = $this->post(route('login'), $data);
+
+        $response->assertRedirect(route('login'));
     }
 
     /**
