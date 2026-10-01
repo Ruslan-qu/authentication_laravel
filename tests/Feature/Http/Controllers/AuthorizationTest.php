@@ -239,10 +239,37 @@ class AuthorizationTest extends TestCase
         $this->assertGuest();
     }
 
-/**
+    /**
      * Test route logout.
      */
     public function test_route_logout(): void
+    {
+        $user = User::factory()->verified()->create();
+
+        $response = $this->actingAs($user)->get('/logout');
+
+        $this->assertGuest();
+    }
+
+    /**
+     * Test route logout session invalidate.
+     */
+    public function test_route_logout_session_invalidate(): void
+    {
+
+        $user = User::factory()->verified()->create();
+
+        $this->withSession(['user_key' => 'secret_value']);
+
+        $response = $this->actingAs($user)->get('/logout');
+
+        $response->assertSessionMissing('user_key');
+    }
+
+    /**
+     * Test route logout redirect.
+     */
+    public function test_route_logout_redirect(): void
     {
         $user = User::factory()->verified()->create();
 
@@ -252,9 +279,9 @@ class AuthorizationTest extends TestCase
     }
 
     /**
-     * Test route logout redirect.
+     * Test route logout middleware auth.
      */
-    public function test_route_logout_redirect(): void
+    public function test_route_logout_middleware_auth(): void
     {
 
         $response = $this->get('/logout');
