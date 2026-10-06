@@ -267,6 +267,24 @@ class AuthorizationTest extends TestCase
     }
 
     /**
+     * Test route logout session regenerate token.
+     */
+    public function test_route_logout_session_regenerate_token(): void
+    {
+        $user = User::factory()->verified()->create();
+
+        Session::put('_token', 'initial-token-value');
+
+        $oldToken = Session::get('_token');
+
+        $this->actingAs($user)->get('/logout');
+
+        $newToken = Session::get('_token');
+
+        $this->assertNotEquals($oldToken, $newToken);
+    }
+
+    /**
      * Test route logout redirect.
      */
     public function test_route_logout_redirect(): void

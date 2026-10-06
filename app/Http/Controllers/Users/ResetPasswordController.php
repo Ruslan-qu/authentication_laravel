@@ -17,7 +17,7 @@ class ResetPasswordController extends Controller
     /**
      * Display password reset request form.
      */
-    public function formEmailPasswordReset()
+    public function passwordRequest()
     {
 
         return view('user.forgot-password');
@@ -26,7 +26,7 @@ class ResetPasswordController extends Controller
     /**
      * Send password reset link.
      */
-    public function handlingEmailFormPasswordReset(Request $request)
+    public function passwordEmail(Request $request)
     {
 
         $request->validate(['email' => 'required|string|email']);
@@ -43,7 +43,7 @@ class ResetPasswordController extends Controller
     /**
      * Display password reset form.
      */
-    public function formPasswordReset(string $token)
+    public function passwordReset(string $token)
     {
 
         return view('user.reset-password', ['token' => $token]);
@@ -53,7 +53,7 @@ class ResetPasswordController extends Controller
     /**
      * Update password.
      */
-    public function passwordReset(ValidPasswordResetRequest $validPasswordResetRequest)
+    public function passwordUpdate(ValidPasswordResetRequest $validPasswordResetRequest)
     {
 
         $validPasswordResetRequest->validated();

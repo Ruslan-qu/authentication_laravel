@@ -17,16 +17,16 @@ Route::get('register', [UserController::class, 'create'])
 Route::post('register', [UserController::class, 'store'])
 ->middleware('guest')->name('user.store');
 
-Route::get('/forgot-password', [ResetPasswordController::class, 'formEmailPasswordReset'])
+Route::get('/forgot-password', [ResetPasswordController::class, 'passwordRequest'])
 ->middleware('guest')->name('password.request');
 
-Route::post('/forgot-password', [ResetPasswordController::class, 'handlingEmailFormPasswordReset'])
+Route::post('/forgot-password', [ResetPasswordController::class, 'passwordEmail'])
 ->middleware(['guest', 'throttle:2,1'])->name('password.email');
 
-Route::get('/reset-password/{token}', [ResetPasswordController::class, 'formPasswordReset'])
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'passwordReset'])
 ->middleware('guest')->name('password.reset');
 
-Route::post('/reset-password', [ResetPasswordController::class, 'passwordReset'])
+Route::post('/reset-password', [ResetPasswordController::class, 'passwordUpdate'])
 ->middleware('guest')->name('password.update');
 
 Route::get('login', [AuthorizationController::class, 'login'])
