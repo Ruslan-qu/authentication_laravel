@@ -240,6 +240,47 @@ class AuthorizationTest extends TestCase
     }
 
     /**
+     * Test route authorization user throttle.
+     *  
+     */
+    public function test_route_authorization_user_throttle(): void
+    {
+        $user = User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
+
+        $data = [
+            'email' => 'ivan@exampl.com',
+            'password' => 'password123',
+        ];
+
+        $response1 = $this->from(route('login'))
+            ->post(route('authorization.user'), $data);
+
+        $response1->assertRedirect(route('login'));
+
+        $response2 = $this->from(route('login'))
+            ->post(route('authorization.user'), $data);
+
+        $response2->assertRedirect(route('login'));
+
+        $response3 = $this->from(route('login'))
+            ->post(route('authorization.user'), $data);
+
+        $response3->assertStatus(429);
+
+        $this->travel(61)->seconds();
+
+        $response2 = $this->from(route('login'))
+            ->post(route('authorization.user'), $data);
+
+        $response2->assertRedirect(route('login'));
+    }
+
+    /**
      * Test route logout.
      */
     public function test_route_logout(): void

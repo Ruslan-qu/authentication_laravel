@@ -33,7 +33,7 @@ Route::get('login', [AuthorizationController::class, 'login'])
 ->middleware('guest')->name('login');
 
 Route::post('login', [AuthorizationController::class, 'authorizationUser'])
-->middleware('guest')->name('authorization.user');
+->middleware(['guest', 'throttle:2,1'])->name('authorization.user');
 
 Route::get('logout', [AuthorizationController::class, 'logout'])
 ->middleware('auth')->name('logout');
