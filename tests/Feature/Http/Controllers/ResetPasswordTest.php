@@ -3,7 +3,10 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Password;
 use Tests\TestCase;
@@ -318,6 +321,23 @@ class ResetPasswordTest extends TestCase
     }
 
     /**
+     * Test route password update invalid.
+     */
+    public function test_route_password_update_invalid(): void
+    {
+        $data = [
+            'token' => 1,
+            'email' => 'ivan.com',
+            'password' => 'pass',
+            'password_confirmation' => 'password123',
+        ];
+
+        $response = $this->post(route('password.update'), $data);
+
+        $response->assertSessionHasErrors(['token', 'email', 'password']);
+    }
+
+    /**
      * Test route password update valid.
      */
     public function test_route_password_update_valid(): void
@@ -325,25 +345,176 @@ class ResetPasswordTest extends TestCase
         $user = User::factory()->verified()->create(
             [
                 'email' => 'ivan@example.com',
+                'password' => 'password123',
             ]
         );
 
         $token = Password::createToken($user);
 
-        dd($token);
+        $data = [
+            'token' => $token,
+            'email' => 'ivan@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ];
 
-        $response = $this->get(route('password.reset', ['token' => $token]));
+        $response = $this->post(route('password.update'), $data);
 
-        $response->assertSee($token);
+        $response->assertValid();
     }
 
     /**
-     * Test route password update.
+     * Test route password update reset.
      */
-    public function test_route_password_update(): void
+    public function test_route_password_update_reset(): void
     {
-        $response = $this->post('/reset-password');
+        $user = User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
 
-        $response->assertStatus(302);
+        $token = Password::createToken($user);
+
+        $data = [
+            'token' => $token,
+            'email' => 'ivan@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ];
+
+        $this->post(route('password.update'), $data);
+
+        $this->assertTrue(Hash::check('password123', $user->refresh()->password));
     }
+
+    /**
+     * Test route password update event.
+     */
+    public function test_route_password_update_event(): void
+    {
+        Event::fake();
+
+        $user = User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
+
+        $token = Password::createToken($user);
+
+        $data = [
+            'token' => $token,
+            'email' => 'ivan@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ];
+
+        $this->post(route('password.update'), $data);
+
+        Event::assertDispatched(PasswordReset::class, function ($event) use ($user) {
+            return $event->user->is($user);
+        });
+    }
+
+    /**
+     * Test route password update redirect.
+     */
+    public function test_route_password_update_redirect(): void
+    {
+       $user = User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
+
+        $token = Password::createToken($user);
+
+        $data = [
+            'token' => $token,
+            'email' => 'ivan@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ];
+
+        $response = $this->post(route('password.update'), $data);
+
+        $response->assertRedirect(route('login'));
+    }
+
+    /**
+     * Test route password update with valid.
+     */
+    public function test_route_password_update_with_valid(): void
+    {
+       $user = User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
+
+        $token = Password::createToken($user);
+
+        $data = [
+            'token' => $token,
+            'email' => 'ivan@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ];
+
+        $response = $this->post(route('password.update'), $data);
+
+        $response->assertSessionHas('status');
+    }
+
+    /**
+     * Test route password update back.
+     */
+    public function test_route_password_update_back(): void
+    {
+$user = User::factory()->verified()->create(
+            [
+                'email' => 'ivan@example.com',
+                'password' => 'password123',
+            ]
+        );
+
+        $token = Password::createToken($user);
+
+        $data = [
+            'token' => $token,
+            'email' => 'ivan@exampl.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ];
+
+        $response = $this->from(route('password.reset', ['token' => $token]))
+            ->post(route('password.update'), $data);
+
+        $response->assertRedirect(route('password.reset', ['token' => $token]));
+    }
+
+    /**
+     * Test route password update with errors.
+     */
+    public function test_route_password_update_with_errors(): void
+    {
+
+        $data = [
+            'token' => 'token',
+            'email' => 'ivan@example.com',
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+        ];
+
+        $response = $this->post(route('password.update'), $data);
+
+        $response->assertSessionHasErrors(['email']);
+    }
+
+    
 }
