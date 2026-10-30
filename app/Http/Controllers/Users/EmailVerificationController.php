@@ -37,7 +37,7 @@ class EmailVerificationController extends Controller
         $user = Auth::user();
 
         return redirect()
-            ->route('user.dashboard', ['user' => $user])
+            ->route('user.dashboard')
             ->with('status', 'Email подтвержден!');
     }
 }

@@ -17,6 +17,12 @@ Route::get('register', [UserController::class, 'create'])
 Route::post('register', [UserController::class, 'store'])
 ->middleware('guest')->name('user.store');
 
+Route::get('/user/dashboard', [UserController::class, 'show'])
+->middleware(['auth', 'verified'])->name('user.dashboard');
+
+Route::get('/user', [UserController::class, 'edit'])
+->middleware(['auth', 'verified'])->name('user.edit');
+
 Route::get('/forgot-password', [ResetPasswordController::class, 'passwordRequest'])
 ->middleware('guest')->name('password.request');
 
@@ -47,7 +53,6 @@ Route::post('/email/verification-notification', [EmailVerificationController::cl
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
 ->middleware(['auth', 'unverified', 'signed'])->name('verification.verify');
 
-Route::get('/user/dashboard/{user}', [DashboardUserController::class, 'index'])
-->middleware(['auth', 'verified'])->name('user.dashboard');
+
 
 

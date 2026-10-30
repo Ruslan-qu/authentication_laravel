@@ -30,9 +30,7 @@ class AuthorizationController extends Controller
         if (Auth::attempt($credentials, $validAuthorizationUserRequest->boolean('remember'))) {
             $validAuthorizationUserRequest->session()->regenerate();
 
-            $user = Auth::user();
-
-            return redirect()->route('user.dashboard', ['user' => $user]);
+            return redirect()->route('user.dashboard');
         }
 
         return back()->withErrors([

@@ -10,10 +10,11 @@
 
 
             <tr>
-                <th scope="col">Имя</th>
-                <th scope="col">Email</th>
-                <th scope="col">Редактировать</th>
-                <th scope="col">Удалить профиль</th>
+                <th scope="col1">Имя</th>
+                <th scope="col2">Email</th>
+                <th scope="col3">Должность</th>
+                <th scope="col4">Редактировать</th>
+                <th scope="col5">Удалить профиль</th>
             </tr>
 
 
@@ -22,9 +23,10 @@
 
 
             <tr>
-                <td></td>
-                <td></td>
-                <form action="" name="edit_participant_personal_account">
+                <td>{{ $users->name }}</td>
+                <td>{{ $users->email }}</td>
+                <td>{{ $users->role->name }}</td>
+                <form action="{{ route ('user.edit') }}" name="edit_participant_personal_account">
 
                     <td><button class="btn btn-outline-secondary" type="submit" name="id"
                             value="">Изменить</button></td>
