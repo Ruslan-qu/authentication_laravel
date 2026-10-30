@@ -30,13 +30,10 @@
             @enderror
 
             <div class="mb-3">
-                <label for="email" class="form-label">Должность</label>
-                <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                <label for="role_id" class="form-label">Должность</label>
+                <input name="role_id" type="role_id" class="form-control id="role_id"
                     placeholder="email" value="{{ $users->email }}">
             </div>
-            @error('email')
-            <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
 
             <div class="mb-3">
                 <label for="password" class="form-label">Пароль</label>
@@ -46,13 +43,6 @@
             @error('password')
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
-
-            <div class="mb-3">
-                <label for="password_confirmation" class="form-label">Подтвердите
-                    пароль</label>
-                <input name="password_confirmation" type="password" class="form-control" id="password_confirmation"
-                    placeholder="Подтвердите пароль">
-            </div>
 
             <button type="submit" class="btn btn-primary">Зарегистрировать</button>
 

@@ -49,7 +49,7 @@ class UserController extends Controller
      */
     public function show()
     {
-        return view('user.dashboard', ['users' => Auth::user()]);
+        return view('user.dashboard', ['user' => Auth::user()]);
     }
 
     /**
@@ -57,7 +57,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('user.dashboard', ['users' => $user]);
+        //dd($user);
+        return view('user.edit', ['users' => $user]);
     }
 
     /**

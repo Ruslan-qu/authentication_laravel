@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="table-responsive text-center pt-4">
-    <table class="table table-bordered table-hover table-striped-columns table-sm align-middle 
+    <table class="table table-hover table-striped-columns table-sm align-middle 
         border-info shadow p-3 mb-5 bg-body-tertiary rounded">
         <thead class="table-secondary">
 
@@ -21,23 +21,13 @@
         </thead>
         <tbody class="table-group-divider">
 
-
             <tr>
-                <td>{{ $users->name }}</td>
-                <td>{{ $users->email }}</td>
-                <td>{{ $users->role->name }}</td>
-                <form action="{{ route ('user.edit') }}" name="edit_participant_personal_account">
-
-                    <td><button class="btn btn-outline-secondary" type="submit" name="id"
-                            value="">Изменить</button></td>
-
-                </form>
-                <form action="" name="delete_participant_personal_account">
-
-                    <td><button class="btn btn-outline-danger" type="submit" name="id"
-                            value="">Удалить</button></td>
-
-                </form>
+                <td>{{ $user->name }}</td>
+                <td>{{ $user->email }}</td>
+                <td>{{ $user->role->name }}</td>
+                <td><a href="{{ route ('user.edit', ['user' => $user]) }}"
+                        class="btn btn-outline-secondary">Изменить</a></td>
+                <td><a href="" class="btn btn-outline-danger">Удалить</a></td>
             </tr>
 
         </tbody>
