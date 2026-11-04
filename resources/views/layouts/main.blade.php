@@ -38,9 +38,11 @@
                             <a class="nav-link text-warning" href="{{ route('logout') }}">Выход</a>
                         </li>
 
+                        @can('admin-panel', $role)
                         <li class="nav-item">
                             <a class="nav-link text-warning" href="#">Админ</a>
                         </li>
+                        @endcan
 
                         @endauth
 

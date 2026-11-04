@@ -12,47 +12,46 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('register', [UserController::class, 'create'])
-->middleware('guest')->name('register');
+    ->middleware('guest')->name('register');
 
 Route::post('register', [UserController::class, 'store'])
-->middleware('guest')->name('user.store');
+    ->middleware('guest')->name('user.store');
 
 Route::get('/user/dashboard', [UserController::class, 'show'])
-->middleware(['auth', 'verified'])->name('user.dashboard');
+    ->middleware(['auth', 'verified'])->name('user.dashboard');
 
 Route::get('/user/{user}', [UserController::class, 'edit'])
-->middleware(['auth', 'verified'])->name('user.edit');
+    ->middleware(['auth', 'verified'])->name('user.edit');
+
+Route::put('/user/{user}', [UserController::class, 'update'])
+    ->middleware(['auth', 'verified'])->name('user.update');
 
 Route::get('/forgot-password', [ResetPasswordController::class, 'passwordRequest'])
-->middleware('guest')->name('password.request');
+    ->middleware('guest')->name('password.request');
 
 Route::post('/forgot-password', [ResetPasswordController::class, 'passwordEmail'])
-->middleware(['guest', 'throttle:2,1'])->name('password.email');
+    ->middleware(['guest', 'throttle:2,1'])->name('password.email');
 
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'passwordReset'])
-->middleware('guest')->name('password.reset');
+    ->middleware('guest')->name('password.reset');
 
 Route::post('/reset-password', [ResetPasswordController::class, 'passwordUpdate'])
-->middleware('guest')->name('password.update');
+    ->middleware('guest')->name('password.update');
 
 Route::get('login', [AuthorizationController::class, 'login'])
-->middleware('guest')->name('login');
+    ->middleware('guest')->name('login');
 
 Route::post('login', [AuthorizationController::class, 'authorizationUser'])
-->middleware(['guest', 'throttle:2,1'])->name('authorization.user');
+    ->middleware(['guest', 'throttle:2,1'])->name('authorization.user');
 
 Route::get('logout', [AuthorizationController::class, 'logout'])
-->middleware('auth')->name('logout');
+    ->middleware('auth')->name('logout');
 
 Route::get('/email/verify', [EmailVerificationController::class, 'notice'])
-->middleware('auth', 'unverified')->name('verification.notice');
+    ->middleware('auth', 'unverified')->name('verification.notice');
 
 Route::post('/email/verification-notification', [EmailVerificationController::class, 'send'])
-->middleware(['auth', 'unverified', 'throttle:2,1'])->name('verification.send');
+    ->middleware(['auth', 'unverified', 'throttle:2,1'])->name('verification.send');
 
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
-->middleware(['auth', 'unverified', 'signed'])->name('verification.verify');
-
-
-
-
+    ->middleware(['auth', 'unverified', 'signed'])->name('verification.verify');
