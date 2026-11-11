@@ -38,7 +38,7 @@
                             <a class="nav-link text-warning" href="{{ route('logout') }}">Выход</a>
                         </li>
 
-                        @can('admin-panel', $role)
+                        @can('admin-panel')
                         <li class="nav-item">
                             <a class="nav-link text-warning" href="#">Админ</a>
                         </li>
