@@ -76,11 +76,11 @@ class UserController extends Controller
         $updateUserRequest->validated();
 
         $user->update([
-        'name' => $updateUserRequest->input('name'),
-        'email' => $updateUserRequest->input('email'),
-    ]);
+            'name' => $updateUserRequest->input('name'),
+            'email' => $updateUserRequest->input('email'),
+        ]);
 
-    return redirect('/users')->with('success', 'Данные обновлены успешно');
+        return redirect('/users')->with('success', 'Данные обновлены успешно');
     }
 
     /**
