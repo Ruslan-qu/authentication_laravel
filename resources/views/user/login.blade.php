@@ -36,7 +36,7 @@
 
             <button type="submit" class="btn btn-danger">Вход</button>
 
-            <a href="{{ route('password.request') }}" class="ms-3">Забыл пароль?</a>
+            <a href="{{ route('password.request') }}" class="link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover ms-3">Забыл пароль?</a>
 
         </form>
     </div>

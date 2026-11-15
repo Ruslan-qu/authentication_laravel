@@ -29,9 +29,9 @@
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
 
-            <div class="form-field">
+            <div class="form-field mb-3">
                 <label for="role_id" class="form-label">Должность</label>
-                <select class="form-control" id="role_id">
+                <select name="role_id" class="form-control" id="role_id" type="role_id">
                     @foreach ($roles as $role)
                     @can('select-roles-1', $role)
                     <option value="1" selected>Пользователь</option>
@@ -48,19 +48,17 @@
                     @endforeach
                 </select>
             </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">Пароль</label>
-                <input name="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                    id="password" placeholder="Пароль">
-            </div>
-            @error('password')
+            @error('role_id')
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
 
-            <button type="submit" class="btn btn-primary">Зарегистрировать</button>
+            <button type="submit" class="btn btn-secondary">Редактировать</button>
+
+            <a href="{{ route('password.request') }}" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover ms-3">Сменить пароль</a>
 
         </form>
+
+
     </div>
 </div>
 

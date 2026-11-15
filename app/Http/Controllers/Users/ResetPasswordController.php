@@ -56,8 +56,6 @@ class ResetPasswordController extends Controller
     public function passwordUpdate(ValidPasswordResetRequest $validPasswordResetRequest)
     {
 
-        $validPasswordResetRequest->validated();
-
         $status = Password::reset(
             $validPasswordResetRequest->only('email', 'password', 'password_confirmation', 'token'),
             function (User $user, string $password) {
