@@ -11,15 +11,24 @@ class UserService
 
     public function update(
         UpdateUserRequest $updateUserRequest,
-        User $user,
-        UpdateEmailAction $updateEmailAction
+        User $user
     ): User {
-        dd($updateUserRequest->name);
-        $user->update([
+
+        //$email = $updateUserRequest->email;
+        //$email_verified_at = date($user->email_verified_at);
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        /*$user->update([
             'name' => $updateUserRequest->name,
-            'email' => $updateEmailAction->handle($updateUserRequest->email, $user),
+            'email' => $email,
+            'email_verified_at' => $email_verified_at,
             'role_id' => $updateUserRequest->role_id,
-        ]);
+        ]);*/
+        $user->save();
+
 
         return $user;
     }

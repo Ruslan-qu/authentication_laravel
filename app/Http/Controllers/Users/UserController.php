@@ -56,11 +56,11 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit()
     {
 
         return view('user.edit', [
-            'user' => $user,
+            'user' => Auth::user(),
             'roles' => Role::all() // При изменение количества роллей измените edit.blade и AppServiceProvider.
         ]);
     }
@@ -73,10 +73,22 @@ class UserController extends Controller
         User $user,
         UserService $userService
     ) {
+
+        $user->fill($updateUserRequest->safe()->input());
+
+        if (!$user->isDirty()) {
+            return back()->with('status', 'Нет изменений');
+        }
+
         $edited_user = $userService->update($updateUserRequest, $user);
         
+        if ($user->wasChanged('email')) {
+            event(new Registered($user));
+            return redirect()->route('verification.notice');
+        }
 
-        return redirect('/users')->with('success', 'Данные обновлены успешно');
+//dd(1);
+        return back()->with('status', 'Данные обновлены успешно');
     }
 
     /**

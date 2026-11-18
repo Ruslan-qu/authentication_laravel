@@ -20,7 +20,7 @@ Route::post('register', [UserController::class, 'store'])
 Route::get('/user/dashboard', [UserController::class, 'show'])
     ->middleware(['auth', 'verified'])->name('user.dashboard');
 
-Route::get('/user/{user}', [UserController::class, 'edit'])
+Route::get('/user', [UserController::class, 'edit'])
     ->middleware(['auth', 'verified'])->name('user.edit');
 
 Route::put('/user/{user}', [UserController::class, 'update'])

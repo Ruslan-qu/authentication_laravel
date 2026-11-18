@@ -25,7 +25,7 @@
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->role->name }}</td>
-                <td><a href="{{ route ('user.edit', ['user' => $user]) }}"
+                <td><a href="{{ route ('user.edit') }}"
                         class="btn btn-outline-secondary">Изменить</a></td>
                 <td><a href="" class="btn btn-outline-danger">Удалить</a></td>
             </tr>
