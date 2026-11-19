@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Восстановление пароля')
+@section('title', 'Cброс пароля')
 
 @section('content')
 
@@ -8,7 +8,7 @@
 
     <div class="col-sm-8 col-md-6 col-lg-4">
 
-        <h1 class="text-center">Восстановление пароля</h1>
+        <h1 class="text-center">Cброс пароля</h1>
 
         <form action="{{ route ('password.email') }}" method="post">
 

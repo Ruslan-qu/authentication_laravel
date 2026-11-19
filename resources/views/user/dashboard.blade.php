@@ -27,7 +27,14 @@
                 <td>{{ $user->role->name }}</td>
                 <td><a href="{{ route ('user.edit') }}"
                         class="btn btn-outline-secondary">Изменить</a></td>
-                <td><a href="" class="btn btn-outline-danger">Удалить</a></td>
+
+                <form action="{{ route ('user.destroy', ['user' => $user]) }}" method="post">
+                    @method('DELETE')
+                    @csrf
+                    <td><button class="btn btn-outline-danger" type="submit">Удалить</button></td>
+
+                </form>
+
             </tr>
 
         </tbody>

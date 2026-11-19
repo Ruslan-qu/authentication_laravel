@@ -54,10 +54,12 @@
 
             <button type="submit" class="btn btn-secondary">Редактировать</button>
 
-            <a href="{{ route('password.request') }}" class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover ms-3">Сменить пароль</a>
+            <a href="{{ route('password.request') }}"
+                class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover ms-3">
+                Сменить пароль
+            </a>
 
         </form>
-
 
     </div>
 </div>

@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\ValidStoreUserRequest;
 use App\Models\Role;
 use App\Models\User;
-use App\Services\UserService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 
@@ -71,7 +70,6 @@ class UserController extends Controller
     public function update(
         UpdateUserRequest $updateUserRequest,
         User $user,
-        UserService $userService
     ) {
 
         $user->fill($updateUserRequest->safe()->input());
@@ -80,21 +78,24 @@ class UserController extends Controller
             return back()->with('status', 'Нет изменений');
         }
 
-        $edited_user = $userService->update($updateUserRequest, $user);
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
         
         if ($user->wasChanged('email')) {
             event(new Registered($user));
             return redirect()->route('verification.notice');
         }
 
-//dd(1);
         return back()->with('status', 'Данные обновлены успешно');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
         //
     }

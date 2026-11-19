@@ -26,17 +26,20 @@ Route::get('/user', [UserController::class, 'edit'])
 Route::put('/user/{user}', [UserController::class, 'update'])
     ->middleware(['auth', 'verified'])->name('user.update');
 
+    Route::delete('/user/{user}', [UserController::class, 'destroy'])
+    ->middleware(['auth', 'verified'])->name('user.destroy');
+
 Route::get('/forgot-password', [ResetPasswordController::class, 'passwordRequest'])
-    ->middleware('guest')->name('password.request');
+    ->name('password.request');
 
 Route::post('/forgot-password', [ResetPasswordController::class, 'passwordEmail'])
-    ->middleware(['guest', 'throttle:2,1'])->name('password.email');
+    ->middleware('throttle:2,1')->name('password.email');
 
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'passwordReset'])
-    ->middleware('guest')->name('password.reset');
+    ->name('password.reset');
 
 Route::post('/reset-password', [ResetPasswordController::class, 'passwordUpdate'])
-    ->middleware('guest')->name('password.update');
+    ->name('password.update');
 
 Route::get('login', [AuthorizationController::class, 'login'])
     ->middleware('guest')->name('login');
