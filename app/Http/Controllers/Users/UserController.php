@@ -8,6 +8,7 @@ use App\Http\Requests\ValidStoreUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -95,8 +96,17 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $user, Request $request)
     {
-        //
+        $user->delete();
+
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect()->route('register')->with('status', 'Аккаунт успешно удален');
+
     }
 }
