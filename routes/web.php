@@ -11,16 +11,16 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('register', [UserController::class, 'create'])
+Route::get('/user/create', [UserController::class, 'create'])
     ->middleware('guest')->name('register');
 
-Route::post('register', [UserController::class, 'store'])
+Route::post('/user', [UserController::class, 'store'])
     ->middleware('guest')->name('user.store');
 
-Route::get('/user/dashboard', [UserController::class, 'show'])
+Route::get('/user', [UserController::class, 'show'])
     ->middleware(['auth', 'verified'])->name('user.dashboard');
 
-Route::get('/user', [UserController::class, 'edit'])
+Route::get('/user/{user}/edit', [UserController::class, 'edit'])
     ->middleware(['auth', 'verified'])->name('user.edit');
 
 Route::put('/user/{user}', [UserController::class, 'update'])

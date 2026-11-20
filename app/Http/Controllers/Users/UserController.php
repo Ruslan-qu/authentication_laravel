@@ -56,11 +56,12 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit()
+    public function edit(User $user, Request $request)
     {
+        abort_if($request->user()->isNot($user), 403);
 
         return view('user.edit', [
-            'user' => Auth::user(),
+            'user' => $user,
             'roles' => Role::all() // При изменение количества роллей измените edit.blade и AppServiceProvider.
         ]);
     }
@@ -84,7 +85,7 @@ class UserController extends Controller
         }
 
         $user->save();
-        
+
         if ($user->wasChanged('email')) {
             event(new Registered($user));
             return redirect()->route('verification.notice');
@@ -107,6 +108,5 @@ class UserController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('register')->with('status', 'Аккаунт успешно удален');
-
     }
 }

@@ -25,7 +25,7 @@
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->role->name }}</td>
-                <td><a href="{{ route ('user.edit') }}"
+                <td><a href="{{ route ('user.edit', ['user' => $user]) }}"
                         class="btn btn-outline-secondary">Изменить</a></td>
 
                 <form action="{{ route ('user.destroy', ['user' => $user]) }}" method="post">
