@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Role;
 use Database\Factories\UserFactory;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Passwords\CanResetPassword as CanPassword;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -38,4 +39,19 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     {
         return $this->belongsTo(Role::class);
     }
+
+    protected static function booted(): void
+{
+    static::updating(function (User $user) {
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+    });
+
+    static::updated(function (User $user) {
+        if ($user->wasChanged('email')) {
+            event(new Registered($user));
+        }
+    });
+}
 }

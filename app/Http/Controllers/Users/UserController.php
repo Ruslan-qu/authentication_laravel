@@ -8,8 +8,10 @@ use App\Http\Requests\ValidStoreUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -56,9 +58,11 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user, Request $request)
+    public function edit(Request $request, User $user)
     {
-        abort_if($request->user()->isNot($user), 403);
+        if (! Gate::allows('admin-panel')) {
+            abort_if($request->user()->isNot($user), 403);
+        }
 
         return view('user.edit', [
             'user' => $user,
@@ -70,13 +74,13 @@ class UserController extends Controller
      * Update the specified resource in storage.
      */
     public function update(
-        UpdateUserRequest $updateUserRequest,
+        UpdateUserRequest $request,
         User $user,
-    ) {
+    ): RedirectResponse {
 
-        $user->fill($updateUserRequest->safe()->input());
+        $user->fill($request->validated());
 
-        if (!$user->isDirty()) {
+        if ($user->isClean()) {
             return back()->with('status', 'Нет изменений');
         }
 
@@ -86,12 +90,9 @@ class UserController extends Controller
 
         $user->save();
 
-        if ($user->wasChanged('email')) {
-            event(new Registered($user));
-            return redirect()->route('verification.notice');
-        }
-
-        return back()->with('status', 'Данные обновлены успешно');
+        return $user->wasChanged('email')
+        ? to_route('verification.notice')
+        : back()->with('status', 'Данные обновлены успешно');
     }
 
     /**
