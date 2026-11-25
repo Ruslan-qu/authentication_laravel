@@ -48,10 +48,10 @@
 
                         @guest
                         <li class="nav-item">
-                            <a class="nav-link text-warning" href="login">Вход</a>
+                            <a class="nav-link text-warning" href="{{ route('login') }}">Вход</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-warning" href="register">Регистрация</a>
+                            <a class="nav-link text-warning" href="{{ route('register') }}">Регистрация</a>
                         </li>
                         @endguest
 
