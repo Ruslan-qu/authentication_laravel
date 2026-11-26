@@ -35,14 +35,29 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ValidStoreUserRequest $validStoreUserRequest)
+    public function store(ValidStoreUserRequest $request)
     {
+        
+        $user = new User;
 
-        $user = User::create($validStoreUserRequest->all());
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        
+        $user->registration_index = $request->registration_index;
+        $exists = User::where('registration_index', $request->registration_index)->exists();
+        if ($exists == true) {
+            $user->role_id = 1;
+        }
+        if ($exists == false) {
+            $user->is_active = true;
+        }
 
-        event(new Registered($user));
+        //$user->save();
 
-        Auth::login($user);
+        //event(new Registered($user));
+
+        //Auth::login($user);
 
         return redirect()->route('verification.notice');
     }
@@ -91,8 +106,8 @@ class UserController extends Controller
         $user->save();
 
         return $user->wasChanged('email')
-        ? to_route('verification.notice')
-        : back()->with('status', 'Данные обновлены успешно');
+            ? to_route('verification.notice')
+            : back()->with('status', 'Данные обновлены успешно');
     }
 
     /**

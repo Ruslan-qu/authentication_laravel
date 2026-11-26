@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['registration_index', 'name', 'email', 'password', 'role_id'])]
+#[Fillable(['registration_index', 'name', 'email', 'password', 'role_id', 'is_active'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {

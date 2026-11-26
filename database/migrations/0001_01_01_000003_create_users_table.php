@@ -20,9 +20,9 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->foreignId('role_id')
-                ->default(1)
+                ->default(2)
                 ->constrained('roles');
-            $table->boolean('is_active')->default(true);
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
 
